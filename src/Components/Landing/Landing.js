@@ -1,0 +1,138 @@
+import React, { useEffect, useState } from "react"
+import "./Landing.css"
+import NavBar from "../NavBar/NavBar.js"
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import image from "../../Images/no-camera.png"
+const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+  })(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  }));
+function Landing() {
+    let [memes, setMemes] = useState([])
+    let [username, setUsername] = useState("yo")
+    let [like, setLiked] = useState(false)
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleExpandClick = () => {
+      setExpanded(!expanded);
+    };
+    let getMemes = () => {
+        fetch('https://ancient-springs-47837.herokuapp.com/get-all-memes', {
+            method: 'post', 
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            },
+             body: JSON.stringify({username: "",startPoint:"0",like:"",category:""})
+          }).then(res=>res.json())
+            .then(res => setMemes(res))
+            .catch(err => console.log(err))
+    }
+    useEffect(() => {
+        getMemes()
+      }, [memes]);// eslint-disable-line react-hooks/exhaustive-deps
+    
+  return (
+    <div className="landing">
+      <NavBar value="home"/>
+    {memes.map((item,index) => (
+    <Card sx={{ width: 345, padding: 1, margin: 1 }} key={index}>
+
+        {
+            item.profilePhoto!==""?
+            <CardHeader
+            avatar={
+              <Avatar src={item.profilePhoto} sx={{ bgcolor: "white", width: 56, height: 56,}} aria-label="recipe">
+              </Avatar>
+            }
+            action={
+              <IconButton aria-label="settings">
+                <MoreVertIcon />
+              </IconButton>
+            }
+            title={item.username}
+            subheader={
+                new Date(item.timeCreated * 1000).toLocaleString()
+                }
+          />
+          :
+          <CardHeader
+          avatar={
+            <Avatar src={image} sx={{ bgcolor: "white", width: 56, height: 56,}} aria-label="recipe">
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={item.username}
+          subheader={
+              new Date(item.timeCreated * 1000).toLocaleString()
+              }
+        />
+          }
+        
+
+
+
+
+      <CardMedia
+        className="meme-image"
+        component="img"
+        image={item.url}
+        alt="Paella dish"
+      />
+      <CardContent>
+        <Typography variant="body2" color="text.secondary">
+
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+      <IconButton aria-label="add to favorites">
+            <FavoriteIcon/>
+          </IconButton>
+        { item.alreadyLiked.map((name, index)=> (
+            name==username?
+            <IconButton aria-label="add to favorites">
+            <FavoriteIcon sx={{ color: red[500] }}/>
+          </IconButton>
+          
+            :
+            <div></div>
+        ))
+        }
+
+        <Typography>{item.alreadyLiked.length}</Typography>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+
+      </CardActions>
+    </Card>
+    ))}
+<Button variant="outlined">Outlined</Button>
+    </div>
+  );
+}
+
+export default Landing;

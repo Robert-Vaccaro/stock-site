@@ -1,0 +1,18 @@
+.nav-box{
+    width: 100%;
+    top : 0px;
+    display:flex; 
+    justify-content:center; 
+    position:fixed;
+    background-color:rgb(255, 255, 255);
+    z-index: 10000;
+}
+
+.meme-container{
+    position: absolute;
+    left: 5px;
+}
+
+.meme-icon{
+    width: 50px;
+}
