@@ -16,6 +16,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import image from "../../Images/no-camera.png"
+import Pagination from '@mui/material/Pagination';
+import LinearProgress from '@mui/material/LinearProgress';
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
@@ -27,34 +29,63 @@ const ExpandMore = styled((props) => {
     }),
   }));
 function Rankings() {
-    let [memes, setMemes] = useState([])
-    let [username, setUsername] = useState("yo")
+    let [users, setUsers] = useState([])
     let [like, setLiked] = useState(false)
+    let [page, setPage] = useState("0")
+    let [hideLoader, setHideLoader] = useState(false)
+    let [pageTotal, setPageTotal] = useState(0)
     const [expanded, setExpanded] = React.useState(false);
-
+    const changePage = (e, val) => {
+        console.log(val-1)
+        setPage((val-1).toString())
+        setHideLoader(false)
+        getUsers()
+      }
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
-    let getMemes = () => {
+    let memeUsers = (res) => {
+        setUsers(res)
+        setHideLoader(true)
+    }
+    let getPageTotal = () => {
+
+        console.log("getPageTotal")
+        
+          fetch('https://ancient-springs-47837.herokuapp.com/get-total-users', {
+              method: 'post', 
+              headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+              },
+               body: JSON.stringify({username: "",startPoint:page, like:"",category:""})
+            }).then(res=>res.json())
+              .then(res => setPageTotal(Math.ceil(res[0]/25)))
+              .catch(err => console.log(err))
+      }
+    let getUsers = () => {
+        console.log("getUsers")
+        setHideLoader(false)
         fetch('https://ancient-springs-47837.herokuapp.com/get-memer-rankings-v2', {
             method: 'post', 
             headers: {
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json'
             },
-             body: JSON.stringify({username: "",startPoint:"0",like:"",category:""})
+             body: JSON.stringify({username: "",startPoint:page,like:"",category:""})
           }).then(res=>res.json())
-            .then(res => setMemes(res))
+            .then(res => memeUsers(res))
             .catch(err => console.log(err))
     }
     useEffect(() => {
-        getMemes()
-      }, [memes]);// eslint-disable-line react-hooks/exhaustive-deps
+        getPageTotal()
+        getUsers()
+      }, [page]);// eslint-disable-line react-hooks/exhaustive-deps
     
   return (
     <div className="rankings">
       <NavBar value="rankings"/>
-    {memes.map((item,index) => (
+    {users.map((item,index) => (
     <Card sx={{ width: 345, padding: 1, margin: 1 }} key={index}>
         {
             item.profilePhoto!==""?
@@ -100,7 +131,14 @@ function Rankings() {
       </CardContent>
     </Card>
     ))}
-<Button variant="outlined">Outlined</Button>
+        <div style={{width:"100%", bottom: "70px", position: "fixed"}} hidden={hideLoader}>
+        <LinearProgress />
+    </div>
+  <div className="pagination-container">
+  
+  <Pagination count={pageTotal} color="secondary" onChange={changePage}/>
+  </div>
+
     </div>
   );
 }

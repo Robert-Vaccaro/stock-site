@@ -1,4 +1,4 @@
-.nav-box{
+.nav-box-light{
     width: 100%;
     top : 0px;
     display:flex; 
@@ -6,13 +6,39 @@
     position:fixed;
     background-color:rgb(255, 255, 255);
     z-index: 10000;
+    border-radius: 15px;
+    -webkit-box-shadow: 0px 2px 2px rgba(207, 207, 207, 0.25);
+    -moz-box-shadow: 0px 2px 2px rgba(207, 207, 207, 0.25);
+    box-shadow: 0px 2px 2px rgba(207, 207, 207, 0.25);
 }
-
+.nav-box-dark{
+    width: 100%;
+    top : 0px;
+    display:flex; 
+    justify-content:center; 
+    position:fixed;
+    background-color:rgb(38, 38, 38);
+    z-index: 10000;
+    border-radius: 15px;
+    -webkit-box-shadow: 0px 2px 2px rgba(234, 234, 234, 0.25);
+    -moz-box-shadow: 0px 2px 2px rgba(234, 234, 234, 0.25);
+    box-shadow: 0px 2px 2px rgba(234, 234, 234, 0.25);
+}
+.textColor-light{
+    color: black;
+}
+.textColor-dark{
+    color: white;
+}
 .meme-container{
     position: absolute;
     left: 5px;
 }
-
+.mode-container{
+    position: absolute;
+    right: 5px;
+    top:5px;
+}
 .meme-icon{
     width: 50px;
 }

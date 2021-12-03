@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import "./Landing.css"
 import NavBar from "../NavBar/NavBar.js"
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -13,49 +12,86 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import image from "../../Images/no-camera.png"
-const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-  })(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  }));
+import Pagination from '@mui/material/Pagination';
+import LinearProgress from '@mui/material/LinearProgress';
+
+
 function Landing() {
     let [memes, setMemes] = useState([])
-    let [username, setUsername] = useState("yo")
-    let [like, setLiked] = useState(false)
+    let [mode, setMode] = useState("light")
+    let [page, setPage] = useState("0")
+    let [pageTotal, setPageTotal] = useState(0)
+    let [memeClass, setMemeClass] = useState("fadeOut")
+    let [hideLoader, setHideLoader] = useState(false)
+    let [styling, setStyling] = useState({ width: 345, padding: 1, margin: 1, backgroundColor:"white"}) 
     const [expanded, setExpanded] = React.useState(false);
-
+    const changePage = (e, val) => {
+      console.log(val-1)
+      setPage((val-1).toString())
+      setHideLoader(false)
+      setMemeClass("fadeOut")
+      getMemes()
+    }
+    let handleModeChange = (mode) => {
+      setMode(mode)
+      if (mode == 'dark') {
+        setStyling({ width: 345, padding: 1, margin: 1, backgroundColor:"black"})
+      } else{
+        setStyling({ width: 345, padding: 1, margin: 1, backgroundColor:"white"})
+      }
+  }
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+    let memeStateSet = (res) => {
+      
+      setMemes(res)
+      setHideLoader(true)
+      setMemeClass("fadeIn")
+    }
+    let getPageTotal = () => {
+
+      console.log("getPageTotal")
+      
+        fetch('https://ancient-springs-47837.herokuapp.com/get-total-memes', {
+            method: 'post', 
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            },
+             body: JSON.stringify({username: "",startPoint:page, like:"",category:""})
+          }).then(res=>res.json())
+            .then(res => setPageTotal(Math.ceil(res[0]/25)))
+            .catch(err => console.log(err))
+    }
     let getMemes = () => {
+
+      console.log("getMemes")
+      
         fetch('https://ancient-springs-47837.herokuapp.com/get-all-memes', {
             method: 'post', 
             headers: {
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json'
             },
-             body: JSON.stringify({username: "",startPoint:"0",like:"",category:""})
+             body: JSON.stringify({username: "",startPoint:page, like:"",category:""})
           }).then(res=>res.json())
-            .then(res => setMemes(res))
+            .then(res => memeStateSet(res))
             .catch(err => console.log(err))
     }
     useEffect(() => {
+      console.log(localStorage.getItem("mode"))
+      getPageTotal()
         getMemes()
-      }, [memes]);// eslint-disable-line react-hooks/exhaustive-deps
+      }, [page]);// eslint-disable-line react-hooks/exhaustive-deps
     
   return (
-    <div className="landing">
-      <NavBar value="home"/>
+    <div className={"landing-" + mode}>
+      <NavBar value="home" handleModeChange={handleModeChange.bind(this)}/>
     {memes.map((item,index) => (
-    <Card sx={{ width: 345, padding: 1, margin: 1 }} key={index}>
+    <Card  sx={styling} key={index}>
 
         {
             item.profilePhoto!==""?
@@ -63,11 +99,6 @@ function Landing() {
             avatar={
               <Avatar src={item.profilePhoto} sx={{ bgcolor: "white", width: 56, height: 56,}} aria-label="recipe">
               </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
             }
             title={item.username}
             subheader={
@@ -80,11 +111,7 @@ function Landing() {
             <Avatar src={image} sx={{ bgcolor: "white", width: 56, height: 56,}} aria-label="recipe">
             </Avatar>
           }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
+
           title={item.username}
           subheader={
               new Date(item.timeCreated * 1000).toLocaleString()
@@ -108,29 +135,26 @@ function Landing() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
-            <FavoriteIcon/>
-          </IconButton>
-        { item.alreadyLiked.map((name, index)=> (
-            name==username?
-            <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites">
             <FavoriteIcon sx={{ color: red[500] }}/>
           </IconButton>
-          
-            :
-            <div></div>
-        ))
-        }
 
         <Typography>{item.alreadyLiked.length}</Typography>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+
 
       </CardActions>
+      
     </Card>
+    
     ))}
-<Button variant="outlined">Outlined</Button>
+        <div style={{width:"100%", bottom: "70px", position: "fixed"}} hidden={hideLoader}>
+        <LinearProgress />
+    </div>
+  <div className={"pagination-container-"+mode}>
+  
+  <Pagination count={pageTotal} color="secondary" onChange={changePage}/>
+  </div>
+
     </div>
   );
 }
