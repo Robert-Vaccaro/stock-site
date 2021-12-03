@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/stock-site/static/css/main.e4684963.chunk.css",
-    "main.js": "/stock-site/static/js/main.73d45e26.chunk.js",
-    "main.js.map": "/stock-site/static/js/main.73d45e26.chunk.js.map",
-    "runtime-main.js": "/stock-site/static/js/runtime-main.7a558389.js",
-    "runtime-main.js.map": "/stock-site/static/js/runtime-main.7a558389.js.map",
-    "static/js/2.3f36b17e.chunk.js": "/stock-site/static/js/2.3f36b17e.chunk.js",
-    "static/js/2.3f36b17e.chunk.js.map": "/stock-site/static/js/2.3f36b17e.chunk.js.map",
-    "static/js/3.49e282d4.chunk.js": "/stock-site/static/js/3.49e282d4.chunk.js",
-    "static/js/3.49e282d4.chunk.js.map": "/stock-site/static/js/3.49e282d4.chunk.js.map",
+    "main.css": "/stock-site/static/css/main.7f7de95a.chunk.css",
+    "main.js": "/stock-site/static/js/main.f995c8b9.chunk.js",
+    "main.js.map": "/stock-site/static/js/main.f995c8b9.chunk.js.map",
+    "runtime-main.js": "/stock-site/static/js/runtime-main.54cbfcb8.js",
+    "runtime-main.js.map": "/stock-site/static/js/runtime-main.54cbfcb8.js.map",
+    "static/js/2.813147bb.chunk.js": "/stock-site/static/js/2.813147bb.chunk.js",
+    "static/js/2.813147bb.chunk.js.map": "/stock-site/static/js/2.813147bb.chunk.js.map",
+    "static/js/3.a8f05b0f.chunk.js": "/stock-site/static/js/3.a8f05b0f.chunk.js",
+    "static/js/3.a8f05b0f.chunk.js.map": "/stock-site/static/js/3.a8f05b0f.chunk.js.map",
     "index.html": "/stock-site/index.html",
-    "static/css/main.e4684963.chunk.css.map": "/stock-site/static/css/main.e4684963.chunk.css.map",
-    "static/js/2.3f36b17e.chunk.js.LICENSE.txt": "/stock-site/static/js/2.3f36b17e.chunk.js.LICENSE.txt",
+    "static/css/main.7f7de95a.chunk.css.map": "/stock-site/static/css/main.7f7de95a.chunk.css.map",
+    "static/js/2.813147bb.chunk.js.LICENSE.txt": "/stock-site/static/js/2.813147bb.chunk.js.LICENSE.txt",
     "static/media/meme-stock-colleen.8834e26a.png": "/stock-site/static/media/meme-stock-colleen.8834e26a.png",
     "static/media/no-camera.7472f3d8.png": "/stock-site/static/media/no-camera.7472f3d8.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.7a558389.js",
-    "static/js/2.3f36b17e.chunk.js",
-    "static/css/main.e4684963.chunk.css",
-    "static/js/main.73d45e26.chunk.js"
+    "static/js/runtime-main.54cbfcb8.js",
+    "static/js/2.813147bb.chunk.js",
+    "static/css/main.7f7de95a.chunk.css",
+    "static/js/main.f995c8b9.chunk.js"
   ]
 }
